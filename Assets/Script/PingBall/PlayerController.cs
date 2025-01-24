@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
             plungerSR.size = new Vector3(5.12f, 5.12f);
         }
 
-        if (ball.transform.position.y > 11)
+        if (ball.transform.position.y > 1)
         {
             launchDoor.SetActive(true);
             isShoot = true;

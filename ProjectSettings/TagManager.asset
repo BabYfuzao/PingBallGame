@@ -7,6 +7,8 @@ TagManager:
   - DeadArea
   - Ball
   - Score
+  - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -52,4 +54,10 @@ TagManager:
     locked: 0
   - name: MoveObject
     uniqueID: 3006846903
+    locked: 0
+  - name: Battle
+    uniqueID: 1181180055
+    locked: 0
+  - name: UI
+    uniqueID: 597908661
     locked: 0

@@ -20,14 +20,14 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         GameStart();
-        TextHandle();
+        //TextHandle();
     }
 
-    public void TextHandle()
+    /*public void TextHandle()
     {
         hPText.text = "HP " + hP.ToString();
         scoreText.text = tmpScore.ToString();
-    }
+    }*/
 
     public IEnumerator UpdateScore()
     {
@@ -38,7 +38,7 @@ public class GameController : MonoBehaviour
                 tmpScore++;
             }
 
-            TextHandle();
+            //TextHandle();
             yield return new WaitForSeconds(0.05f);
         }
     }
@@ -46,15 +46,15 @@ public class GameController : MonoBehaviour
     public void BallDestroy()
     {
         hP--;
-        hPText.text = "HP " + hP.ToString();
-        if (hP > 0)
-        {
+        //TextHandle();
+        /*if (hP > 0)
+        {*/
             GameStart();
-        }
+        /*}
         else
         {
             GameOver();
-        }
+        }*/
         player.isShoot = false;
     }
 

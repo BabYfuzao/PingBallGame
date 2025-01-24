@@ -6,9 +6,12 @@ public class Ball : MonoBehaviour
 {
     private GameController gameController;
 
+    private Player player;
+
     private void Awake()
     {
         gameController = FindObjectOfType<GameController>();
+        player = FindObjectOfType<Player>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -17,6 +20,7 @@ public class Ball : MonoBehaviour
         {
             gameController.score += 10;
             StartCoroutine(gameController.UpdateScore());
+            player.BulletShoot();
         }
     }
 
