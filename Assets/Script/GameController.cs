@@ -5,29 +5,47 @@ using TMPro;
 
 public class GameController : MonoBehaviour
 {
-    public PlayerController player;
+    public PingBallObjectController pBObjController;
+    public Player player;
+    public SoundController soundController;
 
     public int score;
     public int tmpScore = 0;
-    public int hP = 3;
+
+    public int killCount;
+
+    public int ballStayCount;
+    public int ballShotCount;
 
     public GameObject ballPrefabs;
     public Transform launchPos;
 
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI killCountText;
+    public TextMeshProUGUI ballCountText;
     public TextMeshProUGUI hPText;
+
+    public GameObject pausePanel;
+    public GameObject pauseButton;
+    public bool isGameInProgress = true;
+    public bool isGamePause = false;
+
+    public GameObject gameOverPanel;
+    public bool isGameOver = false;
 
     private void Start()
     {
-        GameStart();
-        //TextHandle();
+        Time.timeScale = 1;
+        BallInstantiate();
+        TextHandle();
+        soundController.PlayGameBGM(true);
     }
 
-    /*public void TextHandle()
+    public void TextHandle()
     {
-        hPText.text = "HP " + hP.ToString();
+        hPText.text = "HP " + player.hP.ToString();
         scoreText.text = tmpScore.ToString();
-    }*/
+    }
 
     public IEnumerator UpdateScore()
     {
@@ -38,36 +56,52 @@ public class GameController : MonoBehaviour
                 tmpScore++;
             }
 
-            //TextHandle();
+            TextHandle();
             yield return new WaitForSeconds(0.05f);
         }
     }
 
-    public void BallDestroy()
+    public void PauseControl()
     {
-        hP--;
-        //TextHandle();
-        /*if (hP > 0)
-        {*/
-            GameStart();
-        /*}
-        else
-        {
-            GameOver();
-        }*/
-        player.isShoot = false;
+        isGamePause = !isGamePause;
+        isGameInProgress = !isGameInProgress;
+        Time.timeScale = isGamePause ? 0 : 1;
+
+        pausePanel.SetActive(isGamePause);
+        pauseButton.SetActive(isGameInProgress);
+
+        soundController.PlayGameBGM(isGameInProgress);
     }
 
-    public void GameStart()
+    public void CheckGameOverStatus()
+    {
+        StartCoroutine(GameOverJudge());
+    }
+
+    public IEnumerator GameOverJudge()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        if (ballStayCount <= 0 && ballShotCount <= 0)
+        {
+            GameOver();
+        }
+    }
+
+    public void BallInstantiate()
     {
         GameObject ball = Instantiate(ballPrefabs, launchPos.position, Quaternion.identity);
-        player.ball = ball;
-        player.launchDoor.SetActive(false);
-        player.isLaunching = true;
+        pBObjController.ball = ball;
+
+        ballShotCount++;
+        ballStayCount--;
     }
 
     public void GameOver()
     {
-
+        Time.timeScale = 0;
+        gameOverPanel.SetActive(true);
+        isGameOver = true;
+        soundController.PlayGameOverBGM();
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3529398579038107382}
   - component: {fileID: 3529398579038107379}
   - component: {fileID: 8196089538188079131}
-  - component: {fileID: -7479828142436555172}
+  - component: {fileID: -7053777860334957797}
   m_Layer: 0
   m_Name: ball
   m_TagString: Ball
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: -1288120393
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4517207c98cb70944a17aeacd5d012ef, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 649315078f6243243af65fcd4362e3de, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -99,14 +99,14 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 9855fd5f602f7ac46918f81d50dc7bf2, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &8196089538188079131
 MonoBehaviour:
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01bc80f55a9cb19428a246c71fc6dc41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!58 &-7479828142436555172
+--- !u!58 &-7053777860334957797
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,4 +135,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.152
+  m_Radius: 0.14
