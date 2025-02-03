@@ -45,6 +45,8 @@ public class GameController : MonoBehaviour
     {
         hPText.text = "HP " + player.hP.ToString();
         scoreText.text = tmpScore.ToString();
+        killCountText.text = "Kill " + killCount.ToString();
+        ballCountText.text = "Ball* " + ballStayCount.ToString();
     }
 
     public IEnumerator UpdateScore()
@@ -90,11 +92,14 @@ public class GameController : MonoBehaviour
 
     public void BallInstantiate()
     {
+        soundController.PlayLoadSFX();
+
         GameObject ball = Instantiate(ballPrefabs, launchPos.position, Quaternion.identity);
         pBObjController.ball = ball;
 
         ballShotCount++;
         ballStayCount--;
+        TextHandle();
     }
 
     public void GameOver()

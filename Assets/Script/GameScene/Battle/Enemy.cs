@@ -15,13 +15,19 @@ public class Enemy : MonoBehaviour
     public float moveSpeed;
     private float originalSpeed;
 
+    public GameObject ballCountAddDropItem;
+    public float dropChance;
+
     private bool isBuff = false;
+
+    private GameController gameController;
 
     void Start()
     {
         originalSpeed = moveSpeed;
 
         hPBar = FindObjectOfType<HPBar>();
+        gameController = FindObjectOfType<GameController>();
 
         hPBar.maxHP = hP;
         hPBar.currentHP = hPBar.maxHP;
@@ -147,8 +153,12 @@ public class Enemy : MonoBehaviour
 
     public void CheckDead()
     {
+        float randomValue = Random.Range(0f, 1f);
+
         if (hP <= 0)
         {
+            gameController.killCount++;
+            gameController.TextHandle();
             Destroy(gameObject);
         }
     }

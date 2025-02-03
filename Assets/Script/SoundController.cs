@@ -12,6 +12,7 @@ public class SoundController : MonoBehaviour
     public AudioClip gameOverBGM;
 
     // SFX
+    public AudioClip loadSFX;
     public AudioClip chargeSFX;
     public AudioClip shotSFX;
     public AudioClip ballHitSFX;
@@ -53,6 +54,11 @@ public class SoundController : MonoBehaviour
     }
 
     //SFX
+    public void PlayLoadSFX()
+    {
+        sFXAudioSource.PlayOneShot(loadSFX);
+    }
+
     public void PlayChargeSFX()
     {
         sFXAudioSource.PlayOneShot(chargeSFX);
