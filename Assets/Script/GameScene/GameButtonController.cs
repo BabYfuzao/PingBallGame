@@ -7,6 +7,11 @@ public class GameButtonController : MonoBehaviour
     public SceneLoader sceneLoader;
     public GameController gameController;
 
+    public void ReadyButton()
+    {
+        StartCoroutine(gameController.ReadyCountDown());
+    }
+
     public void RetryButton()
     {
         sceneLoader.LoadGameScene();

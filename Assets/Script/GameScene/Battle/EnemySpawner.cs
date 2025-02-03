@@ -2,28 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+[System.Serializable]
+public class EnemyObject
 {
     public GameObject enemyPrefab;
+    public float spawnChance;
+}
+
+public class EnemySpawner : MonoBehaviour
+{
+    public EnemyObject[] enemys;
 
     public float spawnInterval;
-    public int enemyCount;
+    public int enemySpawnCount;
 
-    void Start()
+    public IEnumerator EnemySpawn()
     {
-        StartCoroutine(EnemySpawn());
-    }
-
-    void Update()
-    {
-
-    }
-
-    IEnumerator EnemySpawn()
-    {
-        for (int i = 0; i < enemyCount; i++)
+        while (true)
         {
-            GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+            GameObject enemy = Instantiate(enemys[0].enemyPrefab, transform.position, Quaternion.identity);
+            spawnInterval = Mathf.Max(2f, spawnInterval - 0.05f);
+            enemySpawnCount++;
             yield return new WaitForSeconds(spawnInterval);
         }
     }

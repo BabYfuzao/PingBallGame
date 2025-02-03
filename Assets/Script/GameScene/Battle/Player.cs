@@ -74,10 +74,11 @@ public class Player : MonoBehaviour
         CheckDead();
     }
 
-    public void CheckDead()
+    private void CheckDead()
     {
         if (hP <= 0)
         {
+            gameController.PlayerGameOver();
             Destroy(gameObject);
         }
     }

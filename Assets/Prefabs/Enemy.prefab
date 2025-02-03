@@ -104,6 +104,14 @@ MonoBehaviour:
   spriteRenderer: {fileID: 6153012676852689614}
   hP: 6
   moveSpeed: 0.5
+  dropItems:
+  - itemPrefab: {fileID: 0}
+    dropChance: 0
+  - itemPrefab: {fileID: 0}
+    dropChance: 0
+  - itemPrefab: {fileID: 0}
+    dropChance: 0
+  overallDropChance: 0.1
 --- !u!50 &6153012676852689612
 Rigidbody2D:
   serializedVersion: 4

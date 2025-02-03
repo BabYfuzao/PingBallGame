@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class DropItemObject
+{
+    public GameObject itemPrefab;
+    public float dropChance;
+}
+
 public class Enemy : MonoBehaviour
 {
     public Rigidbody2D rb;
@@ -15,8 +22,8 @@ public class Enemy : MonoBehaviour
     public float moveSpeed;
     private float originalSpeed;
 
-    public GameObject ballCountAddDropItem;
-    public float dropChance;
+    public DropItemObject[] dropItemObjects;
+    public float overallDropChance;
 
     private bool isBuff = false;
 
@@ -157,9 +164,30 @@ public class Enemy : MonoBehaviour
 
         if (hP <= 0)
         {
+            ItemDrop();
             gameController.killCount++;
             gameController.TextHandle();
             Destroy(gameObject);
+        }
+    }
+
+    public void ItemDrop()
+    {
+        float randomValue = Random.Range(0f, 1f);
+
+        if (randomValue <= overallDropChance)
+        {
+            float cumulativeChance = 0f;
+
+            for (int i = 0; i < dropItemObjects.Length; i++)
+            {
+                cumulativeChance += dropItemObjects[i].dropChance;
+
+                if (randomValue <= cumulativeChance)
+                {
+                    Instantiate(dropItemObjects[i].itemPrefab, transform.position, Quaternion.identity);
+                }
+            }
         }
     }
 }

@@ -21,8 +21,8 @@ public class PingBallObjectController : MonoBehaviour
     public GameObject ball;
     public GameObject launchDoor;
 
-    [HideInInspector] public bool isShoot = true;
-    public bool canLoaded = false;
+    public bool isShoot = true;
+    public bool canLoaded = true;
 
     public GameController gameController;
     public SoundController soundController;

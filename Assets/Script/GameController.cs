@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour
     public PingBallObjectController pBObjController;
     public Player player;
     public SoundController soundController;
+    public EnemySpawner enemySpawner;
 
     public int score;
     public int tmpScore = 0;
@@ -20,25 +21,29 @@ public class GameController : MonoBehaviour
     public GameObject ballPrefabs;
     public Transform launchPos;
 
+    public TextMeshProUGUI countDownText;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI killCountText;
     public TextMeshProUGUI ballCountText;
     public TextMeshProUGUI hPText;
 
+    public GameObject readyPanel;
+    public GameObject readyPanelButton;
+
     public GameObject pausePanel;
     public GameObject pauseButton;
-    public bool isGameInProgress = true;
+    public bool isGameInProgress;
     public bool isGamePause = false;
 
     public GameObject gameOverPanel;
     public bool isGameOver = false;
 
+
     private void Start()
     {
-        Time.timeScale = 1;
-        BallInstantiate();
-        TextHandle();
-        soundController.PlayGameBGM(true);
+        isGameInProgress = false;
+        readyPanel.SetActive(true);
+        countDownText.gameObject.SetActive(false);
     }
 
     public void TextHandle()
@@ -49,6 +54,27 @@ public class GameController : MonoBehaviour
         ballCountText.text = "Ball* " + ballStayCount.ToString();
     }
 
+    public IEnumerator ReadyCountDown()
+    {
+        readyPanelButton.SetActive(false);
+        countDownText.gameObject.SetActive(true);
+
+        for (int countDown = 3; countDown > 0; countDown--)
+        {
+            countDownText.text = countDown.ToString();
+            yield return new WaitForSeconds(1f);
+        }
+
+        countDownText.text = "GO";
+        yield return new WaitForSeconds(1f);
+
+        isGameInProgress = true;
+        readyPanel.SetActive(false);
+        TextHandle();
+        StartCoroutine(enemySpawner.EnemySpawn());
+        soundController.PlayGameBGM(true);
+    }
+
     public IEnumerator UpdateScore()
     {
         while (true)
@@ -57,9 +83,8 @@ public class GameController : MonoBehaviour
             {
                 tmpScore++;
             }
-
             TextHandle();
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.01f);
         }
     }
 
@@ -73,6 +98,18 @@ public class GameController : MonoBehaviour
         pauseButton.SetActive(isGameInProgress);
 
         soundController.PlayGameBGM(isGameInProgress);
+    }
+
+    public void BallInstantiate()
+    {
+        soundController.PlayLoadSFX();
+
+        GameObject ball = Instantiate(ballPrefabs, launchPos.position, Quaternion.identity);
+        pBObjController.ball = ball;
+
+        ballShotCount++;
+        ballStayCount--;
+        TextHandle();
     }
 
     public void CheckGameOverStatus()
@@ -90,19 +127,18 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void BallInstantiate()
+    public void PlayerGameOver()
     {
-        soundController.PlayLoadSFX();
-
-        GameObject ball = Instantiate(ballPrefabs, launchPos.position, Quaternion.identity);
-        pBObjController.ball = ball;
-
-        ballShotCount++;
-        ballStayCount--;
-        TextHandle();
+        StartCoroutine(GameOverDelay());
     }
 
-    public void GameOver()
+    private IEnumerator GameOverDelay()
+    {
+        yield return new WaitForSeconds(0.1f);
+        GameOver();
+    }
+
+    private void GameOver()
     {
         Time.timeScale = 0;
         gameOverPanel.SetActive(true);
