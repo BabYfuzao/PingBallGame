@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int hP;
+    public int maxHP;
+    public int currentHP;
     public HPBar hPBar;
 
     public GameObject[] bulletPrefabs;
@@ -17,7 +18,8 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        hPBar.maxHP = hP;
+        currentHP = maxHP;
+        hPBar.maxHP = maxHP;
         hPBar.currentHP = hPBar.maxHP;
         hPBar.UpdateHPBar();
     }
@@ -62,21 +64,21 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Destroy(collision.gameObject);
-            UpdatePlayerState();
+            currentHP--;
+            UpdatePlayerState(-1);
         }
     }
 
-    public void UpdatePlayerState()
+    public void UpdatePlayerState(int amount)
     {
-        hP--;
-        hPBar.SetHPBar(1);
+        hPBar.SetHPBar(amount);
         gameController.TextHandle();
         CheckDead();
     }
 
     private void CheckDead()
     {
-        if (hP <= 0)
+        if (currentHP <= 0)
         {
             gameController.PlayerGameOver();
             Destroy(gameObject);

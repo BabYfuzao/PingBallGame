@@ -22,7 +22,7 @@ public class BackgroungAnimation : MonoBehaviour
                 yield return FadeOutAndIn();
             }
 
-            yield return spriteRenderer.DOColor(new Color(200f / 255f, 100f / 255f, 0f / 255f), 1f).WaitForCompletion();
+            yield return spriteRenderer.DOColor(Color.white, 1f).WaitForCompletion();
             yield return spriteRenderer.DOFade(1f, 1f).WaitForCompletion();
             yield return new WaitForSeconds(2f);
         }

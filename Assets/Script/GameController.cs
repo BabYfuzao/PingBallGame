@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour
 
     public void TextHandle()
     {
-        hPText.text = "HP " + player.hP.ToString();
+        hPText.text = $"HP {player.currentHP.ToString()}/{player.maxHP.ToString()}";
         scoreText.text = tmpScore.ToString();
         killCountText.text = "Kill " + killCount.ToString();
         ballCountText.text = "Ball* " + ballStayCount.ToString();
@@ -84,7 +84,7 @@ public class GameController : MonoBehaviour
                 tmpScore++;
             }
             TextHandle();
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
