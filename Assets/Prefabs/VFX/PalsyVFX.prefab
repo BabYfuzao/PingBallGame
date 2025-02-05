@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4713143154776267362}
   - component: {fileID: 5578330863597553546}
   m_Layer: 0
-  m_Name: hitVFX
+  m_Name: PalsyVFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

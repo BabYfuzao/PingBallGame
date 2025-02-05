@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     public GameObject[] bulletPrefabs;
 
     public HingeJoint2D swordJoint;
+    public TrailRenderer swordTrail;
+    public SpriteRenderer swordSprite;
 
     public GameController gameController;
 
@@ -44,6 +46,12 @@ public class Player : MonoBehaviour
         StartCoroutine(SlashAnimation());
 
         Destroy(bullet, 3f);
+    }
+
+    public void ChangeSwordTrailColor(Color newColor)
+    {
+        swordSprite.color = newColor;
+        swordTrail.startColor = newColor;
     }
 
     public IEnumerator SlashAnimation()

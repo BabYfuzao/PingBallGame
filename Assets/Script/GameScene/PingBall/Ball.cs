@@ -27,30 +27,35 @@ public class Ball : MonoBehaviour
                 gameController.score += 10;
                 StartCoroutine(gameController.UpdateScore());
                 player.BulletShoot(0);
+                ApplyAttackColor(collision.gameObject);
                 break;
 
             case "BombAttack":
                 gameController.score += 20;
                 StartCoroutine(gameController.UpdateScore());
                 player.BulletShoot(1);
+                ApplyAttackColor(collision.gameObject);
                 break;
 
             case "PalsyAttack":
                 gameController.score += 20;
                 StartCoroutine(gameController.UpdateScore());
                 player.BulletShoot(2);
+                ApplyAttackColor(collision.gameObject);
                 break;
 
             case "RetardAttack":
                 gameController.score += 20;
                 StartCoroutine(gameController.UpdateScore());
                 player.BulletShoot(3);
+                ApplyAttackColor(collision.gameObject);
                 break;
 
             case "BurnAttack":
                 gameController.score += 20;
                 StartCoroutine(gameController.UpdateScore());
                 player.BulletShoot(4);
+                ApplyAttackColor(collision.gameObject);
                 break;
 
             case "BallSpawnPoint":
@@ -66,6 +71,13 @@ public class Ball : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void ApplyAttackColor(GameObject attackObject)
+    {
+        SpriteRenderer attackSpriteRenderer = attackObject.GetComponent<SpriteRenderer>();
+        Color attackColor = attackSpriteRenderer.color;
+        player.ChangeSwordTrailColor(attackColor);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
