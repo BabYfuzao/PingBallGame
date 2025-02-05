@@ -144,5 +144,8 @@ public class GameController : MonoBehaviour
         gameOverPanel.SetActive(true);
         isGameOver = true;
         soundController.PlayGameOverBGM();
+
+        PlayerPrefs.SetInt("LAST SCORE", score);
+        PlayerPrefs.Save();
     }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6365933307493063415}
   - component: {fileID: 6365933307493063368}
   - component: {fileID: 6365933307493063369}
+  - component: {fileID: 155470941743154385}
   m_Layer: 0
   m_Name: BombBumper
   m_TagString: BombAttack
@@ -123,3 +124,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &155470941743154385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6365933307493063371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0363986f37ad0a4db01b8b145cbf7f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitVFXPrefabs: {fileID: 4083882934981412272, guid: 18c94d37862415e44bd6e1bd7c3c0600, type: 3}
+  vfxColor: {r: 0, g: 0, b: 0, a: 0}
+  icon: {fileID: 21300000, guid: 854f4473af79e0c488c38d8b7e2f6298, type: 3}

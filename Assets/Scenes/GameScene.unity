@@ -420,7 +420,7 @@ MonoBehaviour:
   enemys:
   - enemyPrefab: {fileID: 6153012676852689610, guid: 379f84b93ce511948bb9df35b9a68725, type: 3}
     spawnChance: 0
-  spawnInterval: 10
+  spawnInterval: 5
   enemySpawnCount: 0
 --- !u!1 &130854224
 GameObject:

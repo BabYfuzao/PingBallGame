@@ -153,7 +153,7 @@ public class Enemy : MonoBehaviour
     {
         hP -= damage;
 
-        hPBar.SetHPBar(damage);
+        hPBar.SetHPBar(-damage);
 
         CheckDead();
     }

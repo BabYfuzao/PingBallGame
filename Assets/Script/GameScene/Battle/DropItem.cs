@@ -34,10 +34,8 @@ public class DropItem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("OnTriggerEnter2D called with: " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player detected!");
             switch (itemType)
             {
                 case ItemType.HPRegenItem:

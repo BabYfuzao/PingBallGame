@@ -5,9 +5,17 @@ using UnityEngine;
 public class TittleButtonController : MonoBehaviour
 {
     public SceneLoader sceneLoader;
+    public BackgroungAnimation bgAnim;
+
+    public TittleSceneController tittleSceneController;
 
     public void GameStartButton()
     {
-        sceneLoader.LoadGameScene();
+        StartCoroutine(bgAnim.Fade());
+    }
+
+    public void DeleteScoreButton()
+    {
+        tittleSceneController.DeleteScore();
     }
 }
