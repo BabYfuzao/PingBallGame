@@ -25,7 +25,9 @@ public class Enemy : MonoBehaviour
     public DropItemObject[] dropItemObjects;
     public float overallDropChance;
 
-    private bool isBuff = false;
+    public GameObject[] effectVFXs;
+    private List<GameObject> activeEffects = new List<GameObject>();
+    public bool isEffect = false;
 
     private GameController gameController;
 
@@ -65,29 +67,31 @@ public class Enemy : MonoBehaviour
 
     public void StateUpdate(int effectIndex)
     {
-        switch (effectIndex)
+        if (effectIndex == 0)
         {
-            case 0:
-                StartCoroutine(Hit());
-                break;
+            StartCoroutine(Hit());
+        }
+        
+        if(!isEffect)
+        {
+            isEffect = true;
+            switch (effectIndex)
+            {
+                case 1:
+                    StartCoroutine(Palsy());
+                    break;
 
-            case 1:
-                isBuff = true;
-                StartCoroutine(Palsy());
-                break;
+                case 2:
+                    StartCoroutine(Retard());
+                    break;
 
-            case 2:
-                isBuff = true;
-                StartCoroutine(Retard());
-                break;
+                case 3:
+                    StartCoroutine(Burn());
+                    break;
 
-            case 3:
-                isBuff = true;
-                StartCoroutine(Burn());
-                break;
-
-            default:
-                break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -97,17 +101,20 @@ public class Enemy : MonoBehaviour
         TakeDamage(1);
         yield return new WaitForSeconds(0.2f);
 
-        RestoreState();
+        SetColor(Color.white);
     }
 
     private IEnumerator Palsy()
     {
         moveSpeed = 0;
-        SetColor(Color.yellow);
+        GameObject palsyEffect = Instantiate(effectVFXs[0], transform.position, Quaternion.identity);
+        activeEffects.Add(palsyEffect);
         TakeDamage(1);
         yield return new WaitForSeconds(1f);
 
-        isBuff = false;
+        Destroy(palsyEffect);
+        activeEffects.Remove(palsyEffect);
+
         RestoreState();
     }
 
@@ -117,7 +124,6 @@ public class Enemy : MonoBehaviour
         SetColor(Color.blue);
         yield return new WaitForSeconds(3f);
 
-        isBuff = false;
         RestoreState();
     }
 
@@ -130,18 +136,13 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        isBuff = false;
         RestoreState();
     }
 
     private void RestoreState()
     {
-        if (isBuff)
-        {
-            return;
-        }
+        isEffect = false;
         moveSpeed = originalSpeed;
-        SetColor(Color.white);
     }
 
     private void SetColor(Color color)
@@ -164,6 +165,10 @@ public class Enemy : MonoBehaviour
 
         if (hP <= 0)
         {
+            foreach (var activeEffect in activeEffects)
+            {
+                Destroy(activeEffect);
+            }
             ItemDrop();
             gameController.killCount++;
             gameController.TextHandle();

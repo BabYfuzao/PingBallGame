@@ -12,6 +12,7 @@ public class TittleButtonController : MonoBehaviour
     public void GameStartButton()
     {
         StartCoroutine(bgAnim.Fade());
+        tittleSceneController.UIHide();
     }
 
     public void DeleteScoreButton()

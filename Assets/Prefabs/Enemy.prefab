@@ -108,6 +108,8 @@ MonoBehaviour:
   - itemPrefab: {fileID: 3439959083835068483, guid: feea3f71f45534646b343b933aa5b764, type: 3}
     dropChance: 1
   overallDropChance: 1
+  effectVFXs:
+  - {fileID: 1141310455856065981, guid: 0bfe43f9fab36ff44930ad2fb8bd4810, type: 3}
 --- !u!50 &6153012676852689612
 Rigidbody2D:
   serializedVersion: 4

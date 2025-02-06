@@ -5,6 +5,8 @@ using TMPro;
 
 public class TittleSceneController : MonoBehaviour
 {
+    public GameObject Button;
+
     public TextMeshProUGUI firstScore;
 
     void Start()
@@ -22,5 +24,10 @@ public class TittleSceneController : MonoBehaviour
     {
         int score = PlayerPrefs.GetInt("LAST SCORE", 0);
         firstScore.text = "1. " + score.ToString("000000");
+    }
+
+    public void UIHide()
+    {
+        Button.SetActive(false);
     }
 }
