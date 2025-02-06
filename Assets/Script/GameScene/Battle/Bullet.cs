@@ -28,15 +28,19 @@ public class Bullet : MonoBehaviour
                 switch (bulletType)
                 {
                     case BulletType.Normal:
+                        enemy.TakeDamage(1);
                         enemy.StateUpdate(0);
                         break;
                     case BulletType.Bomb:
+                        enemy.TakeDamage(1);
                         Explosion();
                         break;
                     case BulletType.Palsy:
+                        enemy.TakeDamage(1);
                         enemy.StateUpdate(1);
                         break;
                     case BulletType.Retard:
+                        enemy.TakeDamage(1);
                         enemy.StateUpdate(2);
                         Explosion();
                         break;

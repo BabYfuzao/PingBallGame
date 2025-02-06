@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SocialPlatforms.Impl;
+using DG.Tweening;
 
 public class GameController : MonoBehaviour
 {
@@ -27,8 +29,18 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI ballCountText;
     public TextMeshProUGUI hPText;
 
+    public TMP_InputField playerNameInput;
+    public GameObject playerNameInputObject;
+    public TextMeshProUGUI playerNameText;
+    public string playerName;
+
     public GameObject readyPanel;
     public GameObject readyPanelButton;
+    public GameObject readyButton;
+
+    public GameObject nameRuleTextObject;
+    public Transform nameRuleTextTransform;
+    public GameObject okButton;
 
     public GameObject pausePanel;
     public GameObject pauseButton;
@@ -48,10 +60,49 @@ public class GameController : MonoBehaviour
 
     public void TextHandle()
     {
-        hPText.text = $"HP {player.currentHP.ToString()}/{player.maxHP.ToString()}";
-        scoreText.text = tmpScore.ToString();
-        killCountText.text = "Kill " + killCount.ToString();
+        playerNameText.text = playerName;
+        hPText.text = player.currentHP.ToString();
+        scoreText.text = tmpScore.ToString("00000000");
+        killCountText.text = killCount.ToString("00000000");
         ballCountText.text = "Ball* " + ballStayCount.ToString();
+    }
+
+    public void SubmitPlayerName()
+    {
+        string input = playerNameInput.text;
+
+        if (IsValidPlayerName(input))
+        {
+            playerName = input;
+            playerNameInputObject.SetActive(false);
+            okButton.SetActive(false);
+            nameRuleTextObject.SetActive(false);
+            readyButton.SetActive(true);
+        }
+        else
+        {
+            nameRuleTextTransform.DOShakeScale(1f, new Vector3(0.1f, 0.1f, 0), 10, 90, false);
+        }
+    }
+
+    private bool IsValidPlayerName(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return false;
+
+        if (input.Length > 5)
+            return false;
+
+        if (input.Contains(" "))
+            return false;
+
+        foreach (char c in input)
+        {
+            if (!char.IsLetterOrDigit(c))
+                return false;
+        }
+
+        return true;
     }
 
     public IEnumerator ReadyCountDown()
@@ -145,7 +196,52 @@ public class GameController : MonoBehaviour
         isGameOver = true;
         soundController.PlayGameOverBGM();
 
-        PlayerPrefs.SetInt("LAST SCORE", score);
+        SaveResult();
+    }
+
+    private void SaveResult()
+    {
+        List<(string name, int score)> leaderboard = new List<(string, int)>();
+
+        for (int i = 0; i < 3; i++)
+        {
+            string existingName = PlayerPrefs.GetString("NAME_" + i, "No Name");
+            int existingScore = PlayerPrefs.GetInt("SCORE_" + i, 0);
+            leaderboard.Add((existingName, existingScore));
+        }
+
+        bool nameExists = false;
+        for (int i = 0; i < leaderboard.Count; i++)
+        {
+            if (leaderboard[i].name == playerName)
+            {
+                leaderboard[i] = (playerName, Mathf.Max(leaderboard[i].score, score));
+                nameExists = true;
+                break;
+            }
+        }
+
+        if (!nameExists)
+        {
+            leaderboard.Add((playerName, score));
+        }
+
+        leaderboard.Sort((a, b) => b.score.CompareTo(a.score));
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (i < leaderboard.Count)
+            {
+                PlayerPrefs.SetString("NAME_" + i, leaderboard[i].name);
+                PlayerPrefs.SetInt("SCORE_" + i, leaderboard[i].score);
+            }
+            else
+            {
+                PlayerPrefs.SetString("NAME_" + i, "No Name");
+                PlayerPrefs.SetInt("SCORE_" + i, 0);
+            }
+        }
+
         PlayerPrefs.Save();
     }
 }

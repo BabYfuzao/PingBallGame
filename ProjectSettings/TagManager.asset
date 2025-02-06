@@ -61,6 +61,9 @@ TagManager:
   - name: Battle
     uniqueID: 1181180055
     locked: 0
+  - name: DetailPanel
+    uniqueID: 2777844263
+    locked: 0
   - name: UI
     uniqueID: 597908661
     locked: 0

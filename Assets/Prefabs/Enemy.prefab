@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6153012676852689612}
   spriteRenderer: {fileID: 6153012676852689614}
-  hP: 4
+  hP: 100
   moveSpeed: 0.5
   dropItemObjects:
   - itemPrefab: {fileID: 3439959083835068483, guid: feea3f71f45534646b343b933aa5b764, type: 3}
@@ -110,6 +110,8 @@ MonoBehaviour:
   overallDropChance: 1
   effectVFXs:
   - {fileID: 1141310455856065981, guid: 0bfe43f9fab36ff44930ad2fb8bd4810, type: 3}
+  - {fileID: 4083882934981412272, guid: b2e8e640b6431264685a8d9fc8d0c38e, type: 3}
+  - {fileID: 3877850305525756393, guid: 3d288e0b6ad81a048b50ce8991d8b390, type: 3}
 --- !u!50 &6153012676852689612
 Rigidbody2D:
   serializedVersion: 4

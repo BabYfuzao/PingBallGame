@@ -26,10 +26,11 @@ public class Enemy : MonoBehaviour
     public float overallDropChance;
 
     public GameObject[] effectVFXs;
-    private List<GameObject> activeEffects = new List<GameObject>();
-    public bool isEffect = false;
+    private GameObject activeEffect;
 
     private GameController gameController;
+
+    private bool isPalsy = false, isRetard = false, isBurn = false;
 
     void Start()
     {
@@ -57,7 +58,7 @@ public class Enemy : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Explosion"))
         {
-            StateUpdate(0);
+            TakeDamage(1);
         }
         else if (collision.gameObject.CompareTag("RetardExplosion"))
         {
@@ -67,38 +68,44 @@ public class Enemy : MonoBehaviour
 
     public void StateUpdate(int effectIndex)
     {
-        if (effectIndex == 0)
+        switch (effectIndex)
         {
-            StartCoroutine(Hit());
-        }
-        
-        if(!isEffect)
-        {
-            isEffect = true;
-            switch (effectIndex)
-            {
-                case 1:
+            case 0:
+                StartCoroutine(Hit(Color.gray));
+                break;
+
+            case 1:
+                if (!isPalsy)
+                {
                     StartCoroutine(Palsy());
-                    break;
+                }
+                StartCoroutine(Hit(Color.yellow));
+                break;
 
-                case 2:
+            case 2:
+                if (!isRetard)
+                {
                     StartCoroutine(Retard());
-                    break;
+                }
+                StartCoroutine(Hit(Color.blue));
+                break;
 
-                case 3:
+            case 3:
+                if (!isBurn)
+                {
                     StartCoroutine(Burn());
-                    break;
+                }
+                StartCoroutine(Hit(Color.red));
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
     }
 
-    private IEnumerator Hit()
+    private IEnumerator Hit(Color color)
     {
-        SetColor(Color.gray);
-        TakeDamage(1);
+        SetColor(color);
         yield return new WaitForSeconds(0.2f);
 
         SetColor(Color.white);
@@ -106,42 +113,47 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Palsy()
     {
+        isPalsy = true;
         moveSpeed = 0;
         GameObject palsyEffect = Instantiate(effectVFXs[0], transform.position, Quaternion.identity);
-        activeEffects.Add(palsyEffect);
-        TakeDamage(1);
-        yield return new WaitForSeconds(1f);
+        palsyEffect.transform.SetParent(transform);
+        yield return new WaitForSeconds(3f);
 
-        Destroy(palsyEffect);
-        activeEffects.Remove(palsyEffect);
-
-        RestoreState();
+        isPalsy = false;
+        RestoreState(palsyEffect);
     }
 
     private IEnumerator Retard()
     {
+        isRetard = true;
         moveSpeed /= 2;
-        SetColor(Color.blue);
+        GameObject retardEffect = Instantiate(effectVFXs[1], transform.position, Quaternion.identity);
+        retardEffect.transform.SetParent(transform);
         yield return new WaitForSeconds(3f);
 
-        RestoreState();
+        isRetard = false;
+        RestoreState(retardEffect);
     }
 
     private IEnumerator Burn()
     {
-        SetColor(Color.red);
+        isBurn = true;
+        GameObject burnEffect = Instantiate(effectVFXs[2], transform.position, Quaternion.identity);
+        burnEffect.transform.SetParent(transform);
         for (int i = 0; i < 3; i++)
         {
             TakeDamage(1);
+            StartCoroutine(Hit(Color.red));
             yield return new WaitForSeconds(1f);
         }
 
-        RestoreState();
+        isBurn = false;
+        RestoreState(burnEffect);
     }
 
-    private void RestoreState()
+    private void RestoreState(GameObject effect)
     {
-        isEffect = false;
+        Destroy(effect);
         moveSpeed = originalSpeed;
     }
 
@@ -161,18 +173,21 @@ public class Enemy : MonoBehaviour
 
     public void CheckDead()
     {
-        float randomValue = Random.Range(0f, 1f);
-
         if (hP <= 0)
         {
-            foreach (var activeEffect in activeEffects)
-            {
-                Destroy(activeEffect);
-            }
             ItemDrop();
             gameController.killCount++;
             gameController.TextHandle();
+            DestroyCurrentEffects();
             Destroy(gameObject);
+        }
+    }
+
+    private void DestroyCurrentEffects()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
         }
     }
 
