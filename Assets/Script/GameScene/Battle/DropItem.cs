@@ -7,13 +7,15 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class DropItem : MonoBehaviour
 {
     private Player player;
+    private GameController gameController;
+    private HoleController holeController;
     private Transform playerTransform;
 
     public enum ItemType
     {
         HPRegenItem,
         BallCountItem,
-        BumperItem
+        BlackHoleItem
     }
 
     public ItemType itemType;
@@ -21,6 +23,8 @@ public class DropItem : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
+        gameController = FindObjectOfType<GameController>();
+        holeController = FindObjectOfType<HoleController>();
         playerTransform = player.transform;
     }
 
@@ -41,6 +45,12 @@ public class DropItem : MonoBehaviour
                 case ItemType.HPRegenItem:
                     HPRegenItem();
                     break;
+                case ItemType.BallCountItem:
+                    BallCountItem();
+                    break;
+                case ItemType.BlackHoleItem:
+                    BlackHoleItem();
+                    break;
             }
             Destroy(gameObject);
         }
@@ -52,6 +62,23 @@ public class DropItem : MonoBehaviour
         {
             player.currentHP++;
             player.UpdatePlayerState(1);
+        }
+    }
+
+    private void BallCountItem()
+    {
+        if (gameController.ballStayCount < 5)
+        {
+            gameController.ballStayCount++;
+            gameController.UIStatusUpdate();
+        }
+    }
+
+    private void BlackHoleItem()
+    {
+        if (!holeController.isBlackHoleFormation)
+        {
+            holeController.PinBallBlackHoleFormation(true);
         }
     }
 }

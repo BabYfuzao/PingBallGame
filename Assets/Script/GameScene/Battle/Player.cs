@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
 
     public HingeJoint2D swordJoint;
     public TrailRenderer swordTrail;
-    public SpriteRenderer swordSprite;
+    public SpriteRenderer swordSR;
 
     public GameController gameController;
 
@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
 
     public void ChangeSwordTrailColor(Color newColor)
     {
-        swordSprite.color = newColor;
+        swordSR.color = newColor;
         swordTrail.startColor = newColor;
     }
 
@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
     public void UpdatePlayerState(int amount)
     {
         hPBar.SetHPBar(amount);
-        gameController.TextHandle();
+        gameController.UIStatusUpdate();
         CheckDead();
     }
 

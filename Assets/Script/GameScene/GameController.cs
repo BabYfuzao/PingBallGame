@@ -4,10 +4,12 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
 using DG.Tweening;
+using System;
+using UnityEditor.Experimental.GraphView;
 
 public class GameController : MonoBehaviour
 {
-    public PingBallObjectController pBObjController;
+    public PinBallObjectController pBObjController;
     public Player player;
     public SoundController soundController;
     public EnemySpawner enemySpawner;
@@ -20,14 +22,21 @@ public class GameController : MonoBehaviour
     public int ballStayCount;
     public int ballShotCount;
 
-    public GameObject ballPrefabs;
+    public GameObject ballPrefab;
+    [HideInInspector] public GameObject ball;
     public Transform launchPos;
 
+    public GameObject playerDetailPanel;
+
+    public TextMeshProUGUI readyText;
+    public TextMeshProUGUI gameOverText;
     public TextMeshProUGUI countDownText;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI killCountText;
     public TextMeshProUGUI ballCountText;
     public TextMeshProUGUI hPText;
+
+    public GameObject[] ballIcons;
 
     public TMP_InputField playerNameInput;
     public GameObject playerNameInputObject;
@@ -48,23 +57,36 @@ public class GameController : MonoBehaviour
     public bool isGamePause = false;
 
     public GameObject gameOverPanel;
+    public GameObject JokerDisplay;
     public bool isGameOver = false;
 
 
     private void Start()
     {
         isGameInProgress = false;
+        playerDetailPanel.SetActive(false);
         readyPanel.SetActive(true);
         countDownText.gameObject.SetActive(false);
     }
 
-    public void TextHandle()
+    public void UIStatusUpdate()
     {
-        playerNameText.text = playerName;
         hPText.text = player.currentHP.ToString();
-        scoreText.text = tmpScore.ToString("00000000");
-        killCountText.text = killCount.ToString("00000000");
-        ballCountText.text = "Ball* " + ballStayCount.ToString();
+        scoreText.text = tmpScore.ToString();
+        killCountText.text = killCount.ToString();
+        ballCountText.text = "max(5)\n*" + ballStayCount.ToString();
+
+        for (int i = 0; i < ballIcons.Length; i++)
+        {
+            if (i < ballStayCount)
+            {
+                ballIcons[i].SetActive(true);
+            }
+            else
+            {
+                ballIcons[i].SetActive(false);
+            }
+        }
     }
 
     public void SubmitPlayerName()
@@ -74,14 +96,26 @@ public class GameController : MonoBehaviour
         if (IsValidPlayerName(input))
         {
             playerName = input;
+            playerNameText.text = playerName;
+
             playerNameInputObject.SetActive(false);
             okButton.SetActive(false);
             nameRuleTextObject.SetActive(false);
             readyButton.SetActive(true);
+            readyText.gameObject.SetActive(true);
+
+            readyText.text = $"{playerName}, ARE YOU READY?";
         }
         else
         {
             nameRuleTextTransform.DOShakeScale(1f, new Vector3(0.1f, 0.1f, 0), 10, 90, false);
+
+            TMP_Text nameRuleText = nameRuleTextTransform.GetComponent<TMP_Text>();
+            Color originalColor = nameRuleText.color;
+            Color errorColor = Color.red;
+
+            nameRuleText.color = errorColor;
+            nameRuleText.DOColor(originalColor, 1f).SetEase(Ease.Linear);
         }
     }
 
@@ -90,7 +124,7 @@ public class GameController : MonoBehaviour
         if (string.IsNullOrWhiteSpace(input))
             return false;
 
-        if (input.Length > 5)
+        if (input.Length > 8)
             return false;
 
         if (input.Contains(" "))
@@ -108,25 +142,35 @@ public class GameController : MonoBehaviour
     public IEnumerator ReadyCountDown()
     {
         readyPanelButton.SetActive(false);
+        readyText.gameObject.SetActive(false);
         countDownText.gameObject.SetActive(true);
 
         for (int countDown = 3; countDown > 0; countDown--)
         {
+            soundController.PlayCountDownSFX();
             countDownText.text = countDown.ToString();
             yield return new WaitForSeconds(1f);
         }
 
-        countDownText.text = "GO";
+        soundController.PlayGoSFX();
+        countDownText.text = "GO!";
         yield return new WaitForSeconds(1f);
 
         isGameInProgress = true;
         readyPanel.SetActive(false);
-        TextHandle();
+        playerDetailPanel.SetActive(true);
+        UIStatusUpdate();
         StartCoroutine(enemySpawner.EnemySpawn());
         soundController.PlayGameBGM(true);
     }
 
-    public IEnumerator UpdateScore()
+    public void ScoreUpdate(int scoreCount)
+    {
+        score += scoreCount;
+        StartCoroutine(StartScoreUpdate());
+    }
+
+    public IEnumerator StartScoreUpdate()
     {
         while (true)
         {
@@ -134,7 +178,7 @@ public class GameController : MonoBehaviour
             {
                 tmpScore++;
             }
-            TextHandle();
+            UIStatusUpdate();
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -155,12 +199,12 @@ public class GameController : MonoBehaviour
     {
         soundController.PlayLoadSFX();
 
-        GameObject ball = Instantiate(ballPrefabs, launchPos.position, Quaternion.identity);
+        ball = Instantiate(ballPrefab, launchPos.position, Quaternion.identity);
         pBObjController.ball = ball;
 
         ballShotCount++;
         ballStayCount--;
-        TextHandle();
+        UIStatusUpdate();
     }
 
     public void CheckGameOverStatus()
@@ -196,26 +240,66 @@ public class GameController : MonoBehaviour
         isGameOver = true;
         soundController.PlayGameOverBGM();
 
-        SaveResult();
+        if (score >= 1 && killCount >= 1)
+        {
+            SaveResult();
+            gameOverText.text = $"Congratulations! {playerName}, You get {score.ToString()} score, and kill {killCount.ToString()} enemy.";
+        }
+        else
+        {
+            gameOverText.text = "You look like a Joker.";
+        }
     }
 
     private void SaveResult()
     {
+        List<(string name, int score)> scoreLeaderboard = LoadScoreLeaderboard();
+        List<(string name, int kills)> killLeaderboard = LoadKillLeaderboard();
+
+        UpdateLeaderboard(scoreLeaderboard, playerName, score);
+        UpdateLeaderboard(killLeaderboard, playerName, killCount);
+
+        SaveLeaderboard(scoreLeaderboard, "SCORE_");
+        SaveLeaderboard(killLeaderboard, "KILLS_");
+    }
+
+    private List<(string name, int score)> LoadScoreLeaderboard()
+    {
         List<(string name, int score)> leaderboard = new List<(string, int)>();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
-            string existingName = PlayerPrefs.GetString("NAME_" + i, "No Name");
+            string existingName = PlayerPrefs.GetString("SCORE_NAME_" + i, "-");
             int existingScore = PlayerPrefs.GetInt("SCORE_" + i, 0);
             leaderboard.Add((existingName, existingScore));
         }
 
+        return leaderboard;
+    }
+
+    private List<(string name, int kills)> LoadKillLeaderboard()
+    {
+        List<(string name, int kills)> leaderboard = new List<(string, int)>();
+
+        for (int i = 0; i < 5; i++)
+        {
+            string existingName = PlayerPrefs.GetString("KILLS_NAME_" + i, "-");
+            int existingKills = PlayerPrefs.GetInt("KILLS_" + i, 0);
+            leaderboard.Add((existingName, existingKills));
+        }
+
+        return leaderboard;
+    }
+
+    private void UpdateLeaderboard<T>(List<(string name, T score)> leaderboard, string playerName, T newScore) where T : IComparable
+    {
         bool nameExists = false;
+
         for (int i = 0; i < leaderboard.Count; i++)
         {
             if (leaderboard[i].name == playerName)
             {
-                leaderboard[i] = (playerName, Mathf.Max(leaderboard[i].score, score));
+                leaderboard[i] = (playerName, Max(leaderboard[i].score, newScore));
                 nameExists = true;
                 break;
             }
@@ -223,22 +307,30 @@ public class GameController : MonoBehaviour
 
         if (!nameExists)
         {
-            leaderboard.Add((playerName, score));
+            leaderboard.Add((playerName, newScore));
         }
 
         leaderboard.Sort((a, b) => b.score.CompareTo(a.score));
+    }
 
-        for (int i = 0; i < 3; i++)
+    private T Max<T>(T a, T b) where T : IComparable
+    {
+        return a.CompareTo(b) > 0 ? a : b;
+    }
+
+    private void SaveLeaderboard<T>(List<(string name, T score)> leaderboard, string prefix)
+    {
+        for (int i = 0; i < 5; i++)
         {
             if (i < leaderboard.Count)
             {
-                PlayerPrefs.SetString("NAME_" + i, leaderboard[i].name);
-                PlayerPrefs.SetInt("SCORE_" + i, leaderboard[i].score);
+                PlayerPrefs.SetString(prefix + "NAME_" + i, leaderboard[i].name);
+                PlayerPrefs.SetInt(prefix + i, Convert.ToInt32(leaderboard[i].score));
             }
             else
             {
-                PlayerPrefs.SetString("NAME_" + i, "No Name");
-                PlayerPrefs.SetInt("SCORE_" + i, 0);
+                PlayerPrefs.SetString(prefix + "NAME_" + i, "-");
+                PlayerPrefs.SetInt(prefix + i, 0);
             }
         }
 

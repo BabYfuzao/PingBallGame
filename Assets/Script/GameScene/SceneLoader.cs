@@ -5,14 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    public void LoadTittleScene()
+    public void LoadTitleScene(float delay)
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(0);
+        StartCoroutine(LoadSceneAfterSound(0, delay));
     }
-    public void LoadGameScene()
+
+    public void LoadGameScene(float delay)
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(1);
+        StartCoroutine(LoadSceneAfterSound(1, delay));
+    }
+
+    private IEnumerator LoadSceneAfterSound(int sceneIndex, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(sceneIndex);
     }
 }

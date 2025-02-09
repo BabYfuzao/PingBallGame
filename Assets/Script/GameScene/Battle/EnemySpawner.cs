@@ -12,18 +12,41 @@ public class EnemyObject
 public class EnemySpawner : MonoBehaviour
 {
     public EnemyObject[] enemys;
-
-    public float spawnInterval;
-    public int enemySpawnCount;
+    public float spawnInterval = 2f;
+    public int enemySpawnCount = 0;
 
     public IEnumerator EnemySpawn()
     {
         while (true)
         {
-            GameObject enemy = Instantiate(enemys[0].enemyPrefab, transform.position, Quaternion.identity);
-            spawnInterval = Mathf.Max(2f, spawnInterval - 0.05f);
+            int maxEnemyIndex = Mathf.Min(enemySpawnCount / 8, enemys.Length - 1);
+            GameObject enemy = Instantiate(GetRandomEnemy(maxEnemyIndex), transform.position, Quaternion.identity);
+            spawnInterval = Mathf.Max(2f, spawnInterval - 0.1f);
             enemySpawnCount++;
             yield return new WaitForSeconds(spawnInterval);
         }
+    }
+
+    private GameObject GetRandomEnemy(int maxEnemyIndex)
+    {
+        float totalChance = 0f;
+        foreach (var enemy in enemys)
+        {
+            totalChance += enemy.spawnChance;
+        }
+
+        float randomValue = Random.Range(0, totalChance);
+        float cumulativeChance = 0f;
+
+        for (int i = 0; i <= maxEnemyIndex; i++)
+        {
+            cumulativeChance += enemys[i].spawnChance;
+            if (randomValue <= cumulativeChance)
+            {
+                return enemys[i].enemyPrefab;
+            }
+        }
+
+        return enemys[0].enemyPrefab;
     }
 }

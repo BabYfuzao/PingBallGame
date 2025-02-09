@@ -12,15 +12,29 @@ public class SoundController : MonoBehaviour
     public AudioClip gameOverBGM;
 
     // SFX
+    public AudioClip popSFX;
+    // UI
+    public AudioClip buttonSFX;
+    public AudioClip countDownSFX;
+    public AudioClip goSFX;
+
+    // PinBall
     public AudioClip loadSFX;
     public AudioClip chargeSFX;
     public AudioClip shotSFX;
     public AudioClip ballHitSFX;
-    public AudioClip gunSFX;
+    public AudioClip scoreSFX;
     public AudioClip flipperOpenSFX;
     public AudioClip flipperCloseSFX;
+    public AudioClip dangerSFX;
+    public AudioClip meteoriteSFX;
+    public AudioClip holeSFX;
 
-    //BGM
+    // Battle
+    public AudioClip gunSFX;
+    public AudioClip enemyHitSFX;
+
+    // BGM
     public void PlayGameBGM(bool isPlayGameBGM)
     {
         if (bGMAudioSource.clip != gameBGM)
@@ -53,39 +67,46 @@ public class SoundController : MonoBehaviour
         bGMAudioSource.Play();
     }
 
-    //SFX
-    public void PlayLoadSFX()
+    // SFX
+    public void PlaySFX(AudioClip clip)
     {
-        sFXAudioSource.PlayOneShot(loadSFX);
+        if (clip != null)
+        {
+            sFXAudioSource.PlayOneShot(clip);
+        }
     }
 
-    public void PlayChargeSFX()
+    public void PlayPopSFX() => PlaySFX(popSFX);
+
+    // UI
+    public void PlayButtonSFX() => PlaySFX(buttonSFX);
+    public void PlayCountDownSFX() => PlaySFX(countDownSFX);
+    public void PlayGoSFX() => PlaySFX(goSFX);
+
+    // PinBall
+    public void PlayLoadSFX() => PlaySFX(loadSFX);
+    public void PlayChargeSFX() => PlaySFX(chargeSFX);
+    public void PlayShotSFX() => PlaySFX(shotSFX);
+    public void PlayBallHitSFX() => PlaySFX(ballHitSFX);
+    public void PlayScoreSFX() => PlaySFX(scoreSFX);
+    public void PlayFlipperOpenSFX() => PlaySFX(flipperOpenSFX);
+    public void PlayFlipperCloseSFX() => PlaySFX(flipperCloseSFX);
+    public void PlayDangerSFX() => PlaySFX(dangerSFX);
+    public void PlayMeteoriteSFX() => PlaySFX(meteoriteSFX);
+
+    public void PlayHoleSFX()
     {
-        sFXAudioSource.PlayOneShot(chargeSFX);
+        sFXAudioSource.clip = holeSFX;
+        sFXAudioSource.loop = true;
+        sFXAudioSource.Play();
     }
 
-    public void PlayShotSFX()
+    public void StopHoleSFX()
     {
-        sFXAudioSource.PlayOneShot(shotSFX);
+        sFXAudioSource.Stop();
     }
 
-    public void PlayBallHitSFX()
-    {
-        sFXAudioSource.PlayOneShot(ballHitSFX);
-    }
-
-    public void PlayGunSFX()
-    {
-        sFXAudioSource.PlayOneShot(gunSFX);
-    }
-
-    public void PlayFlipperOpenSFX()
-    {
-        sFXAudioSource.PlayOneShot(flipperOpenSFX);
-    }
-
-    public void PlayFlipperCloseSFX()
-    {
-        sFXAudioSource.PlayOneShot(flipperCloseSFX);
-    }
+    // Battle
+    public void PlayGunSFX() => PlaySFX(gunSFX);
+    public void PlayEnemyHitSFX() => PlaySFX(enemyHitSFX);
 }

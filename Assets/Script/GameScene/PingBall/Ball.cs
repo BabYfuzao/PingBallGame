@@ -5,14 +5,14 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     private GameController gameController;
-    private PingBallObjectController pBObjController;
+    private PinBallObjectController pBObjController;
     private Player player;
     private SoundController soundController;
 
     private void Awake()
     {
         gameController = FindObjectOfType<GameController>();
-        pBObjController = FindObjectOfType<PingBallObjectController>();
+        pBObjController = FindObjectOfType<PinBallObjectController>();
         player = FindObjectOfType<Player>();
         soundController = FindObjectOfType<SoundController>();
     }
@@ -24,60 +24,43 @@ public class Ball : MonoBehaviour
         switch (collision.gameObject.tag)
         {
             case "NormalAttack":
-                gameController.score += 10;
-                StartCoroutine(gameController.UpdateScore());
+                gameController.ScoreUpdate(10);
                 player.BulletShoot(0);
-                ApplyAttackColor(collision.gameObject);
+                player.ChangeSwordTrailColor(Color.white);
                 break;
 
             case "BombAttack":
-                gameController.score += 20;
-                StartCoroutine(gameController.UpdateScore());
+                gameController.ScoreUpdate(20);
                 player.BulletShoot(1);
-                ApplyAttackColor(collision.gameObject);
+                player.ChangeSwordTrailColor(Color.black);
                 break;
 
             case "PalsyAttack":
-                gameController.score += 20;
-                StartCoroutine(gameController.UpdateScore());
+                gameController.ScoreUpdate(20);
                 player.BulletShoot(2);
-                ApplyAttackColor(collision.gameObject);
+                player.ChangeSwordTrailColor(Color.yellow);
                 break;
 
             case "RetardAttack":
-                gameController.score += 20;
-                StartCoroutine(gameController.UpdateScore());
+                gameController.ScoreUpdate(20);
                 player.BulletShoot(3);
-                ApplyAttackColor(collision.gameObject);
+                player.ChangeSwordTrailColor(new Color(0f / 255f, 200f / 255f, 255f / 255f));
                 break;
 
             case "BurnAttack":
-                gameController.score += 20;
-                StartCoroutine(gameController.UpdateScore());
+                gameController.ScoreUpdate(20);
                 player.BulletShoot(4);
-                ApplyAttackColor(collision.gameObject);
+                player.ChangeSwordTrailColor(Color.red);
                 break;
 
             case "BallSpawnPoint":
                 pBObjController.isShoot = false;
-                pBObjController.canLoaded = false;
                 pBObjController.isPlayChargeSFX = false;
-                break;
-
-            case "LauchDoor":
-                pBObjController.canLoaded = true;
                 break;
 
             default:
                 break;
         }
-    }
-
-    public void ApplyAttackColor(GameObject attackObject)
-    {
-        SpriteRenderer attackSpriteRenderer = attackObject.GetComponent<SpriteRenderer>();
-        Color attackColor = attackSpriteRenderer.color;
-        player.ChangeSwordTrailColor(attackColor);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -92,7 +75,9 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("DeadArea"))
         {
+            soundController.PlayPopSFX();
             gameController.ballShotCount--;
+            pBObjController.canLoaded = true;
             gameController.CheckGameOverStatus();
             Destroy(gameObject);
         }

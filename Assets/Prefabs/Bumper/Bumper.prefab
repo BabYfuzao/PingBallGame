@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2334683907240266957}
   - component: {fileID: 2334683907240266959}
-  - component: {fileID: 2334683907240266956}
   - component: {fileID: 2334683907240266958}
   - component: {fileID: -694365342359043782}
+  - component: {fileID: -4826847300418682532}
   m_Layer: 0
   m_Name: Bumper
   m_TagString: NormalAttack
@@ -27,9 +27,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2334683907240266954}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 1134340147
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 09b6f7111fb256a41bd5c310fb205e88, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 453b7029135edb249bfd35b45b6968ec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -87,22 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &2334683907240266956
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2334683907240266954}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.645
 --- !u!50 &2334683907240266958
 Rigidbody2D:
   serializedVersion: 4
@@ -137,5 +121,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitVFXPrefabs: {fileID: 4083882934981412272, guid: 18c94d37862415e44bd6e1bd7c3c0600, type: 3}
-  vfxColor: {r: 1, g: 1, b: 1, a: 0}
-  icon: {fileID: 21300000, guid: 854f4473af79e0c488c38d8b7e2f6298, type: 3}
+  spriteRenderer: {fileID: 2334683907240266959}
+  color: {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 1}
+--- !u!58 &-4826847300418682532
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2334683907240266954}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.365625

@@ -5,10 +5,19 @@ using UnityEngine;
 public class GameButtonController : MonoBehaviour
 {
     public SceneLoader sceneLoader;
+    public SoundController soundController;
     public GameController gameController;
+
+    private float buttonSFXDealy;
+
+    public void Start()
+    {
+        buttonSFXDealy = soundController.buttonSFX.length;
+    }
 
     public void OKButton()
     {
+        soundController.PlayButtonSFX();
         gameController.SubmitPlayerName();
     }
 
@@ -19,16 +28,19 @@ public class GameButtonController : MonoBehaviour
 
     public void RetryButton()
     {
-        sceneLoader.LoadGameScene();
+        soundController.PlayButtonSFX();
+        sceneLoader.LoadGameScene(buttonSFXDealy);
     }
 
     public void ReturnMenuButton()
     {
-        sceneLoader.LoadTittleScene();
+        soundController.PlayButtonSFX();
+        sceneLoader.LoadTitleScene(buttonSFXDealy);
     }
 
     public void PauseControlButton()
     {
+        soundController.PlayButtonSFX();
         gameController.PauseControl();
     }
 }

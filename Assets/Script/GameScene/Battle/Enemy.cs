@@ -26,9 +26,9 @@ public class Enemy : MonoBehaviour
     public float overallDropChance;
 
     public GameObject[] effectVFXs;
-    private GameObject activeEffect;
 
     private GameController gameController;
+    private SoundController soundController;
 
     private bool isPalsy = false, isRetard = false, isBurn = false;
 
@@ -38,31 +38,41 @@ public class Enemy : MonoBehaviour
 
         hPBar = FindObjectOfType<HPBar>();
         gameController = FindObjectOfType<GameController>();
+        soundController = FindObjectOfType<SoundController>();
 
         hPBar.maxHP = hP;
         hPBar.currentHP = hPBar.maxHP;
         hPBar.UpdateHPBar();
     }
 
-    void Update()
+    private void Update()
     {
-        Vector2 direction = Vector2.left;
-        rb.velocity = direction * moveSpeed;
+        transform.Translate(Vector2.left * moveSpeed * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
+            soundController.PlayEnemyHitSFX();
             Destroy(collision.gameObject);
         }
         else if (collision.gameObject.CompareTag("Explosion"))
         {
+            soundController.PlayEnemyHitSFX();
             TakeDamage(1);
+            StartCoroutine(Hit(Color.gray));
         }
         else if (collision.gameObject.CompareTag("RetardExplosion"))
         {
+            soundController.PlayEnemyHitSFX();
             StateUpdate(2);
+        }
+        else if (collision.gameObject.CompareTag("Meteorite"))
+        {
+            soundController.PlayEnemyHitSFX();
+            TakeDamage(100);
+            StartCoroutine(Hit(Color.black));
         }
     }
 
@@ -175,9 +185,10 @@ public class Enemy : MonoBehaviour
     {
         if (hP <= 0)
         {
+            soundController.PlayPopSFX();
             ItemDrop();
             gameController.killCount++;
-            gameController.TextHandle();
+            gameController.UIStatusUpdate();
             DestroyCurrentEffects();
             Destroy(gameObject);
         }
