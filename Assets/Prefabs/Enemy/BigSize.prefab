@@ -102,8 +102,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6153012676852689612}
   spriteRenderer: {fileID: 6153012676852689614}
-  hP: 18
-  moveSpeed: 0.2
+  hP: 20
+  moveSpeed: 0.5
   dropItemObjects:
   - itemPrefab: {fileID: 3439959083835068483, guid: feea3f71f45534646b343b933aa5b764, type: 3}
     dropChance: 3

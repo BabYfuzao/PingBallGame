@@ -108,7 +108,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            nameRuleTextTransform.DOShakeScale(1f, new Vector3(0.1f, 0.1f, 0), 10, 90, false);
+            nameRuleTextTransform.DOShakeScale(1f, new Vector3(0.1f, 0.1f, 0), 10, 90, true);
 
             TMP_Text nameRuleText = nameRuleTextTransform.GetComponent<TMP_Text>();
             Color originalColor = nameRuleText.color;

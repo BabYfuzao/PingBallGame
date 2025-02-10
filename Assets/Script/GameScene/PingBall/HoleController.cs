@@ -6,16 +6,21 @@ using DG.Tweening;
 public class HoleController : MonoBehaviour
 {
     public bool isBlackHoleFormation = false;
+    public bool canFakeBallInstantiate = false;
+
+    public float blackHoleDuration;
 
     public GameObject pBlackHole;
     public GameObject pWhiteHole;
+
+    public GameObject fakeBallPrefab;
 
     public Transform pWhiteHoleTransForm;
 
     public GameObject bBlackHole;
 
     public GameObject heart;
-    public Transform heart1, heart2, heart3;
+    public Transform[] hearts;
 
     public PinBallObjectController pbobjController;
     public GameController gameController;
@@ -41,6 +46,15 @@ public class HoleController : MonoBehaviour
         pWhiteHole.SetActive(isFormation);
     }
 
+    public void FakeBallInstantiate()
+    {
+        if (!canFakeBallInstantiate)
+        {
+            GameObject fakeBall = Instantiate(fakeBallPrefab, pWhiteHoleTransForm.position, Quaternion.identity);
+            canFakeBallInstantiate = true;
+        }
+    }
+
     public void BallInBlackHole()
     {
         soundController.PlayHoleSFX();
@@ -49,15 +63,21 @@ public class HoleController : MonoBehaviour
 
     public IEnumerator StartHoleAction()
     {
-        heart1.DOShakeScale(1f, new Vector3(0.1f, 0.1f, 0), 10, 90, false);
         BattleBlackHoleFormation(true);
-        for (int i = 0; i < 10; i++)
+        heart.SetActive(true);
+        SpriteRenderer heartSR = heart.GetComponent<SpriteRenderer>();
+
+        foreach (Transform heart in hearts)
+        {
+            heart.DOShakeScale(blackHoleDuration, new Vector3(1f, 1f, 0), 10, 30, true);
+        }
+
+        for (int i = 0; i < blackHoleDuration; i++)
         {
             soundController.PlayScoreSFX();
             gameController.ScoreUpdate(5);
             yield return new WaitForSeconds(1f);
         }
-
         PinBallWhiteHoleFormation(true);
         pbobjController.ball.transform.position = pWhiteHoleTransForm.position;
 
@@ -66,6 +86,7 @@ public class HoleController : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         PinBallWhiteHoleFormation(false);
+        heart.SetActive(false);
         isBlackHoleFormation = false;
         soundController.StopHoleSFX();
     }

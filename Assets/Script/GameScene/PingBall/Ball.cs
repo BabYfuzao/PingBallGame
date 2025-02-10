@@ -8,6 +8,9 @@ public class Ball : MonoBehaviour
     private PinBallObjectController pBObjController;
     private Player player;
     private SoundController soundController;
+    private HoleController holeController;
+
+    public bool isFake;
 
     private void Awake()
     {
@@ -15,6 +18,7 @@ public class Ball : MonoBehaviour
         pBObjController = FindObjectOfType<PinBallObjectController>();
         player = FindObjectOfType<Player>();
         soundController = FindObjectOfType<SoundController>();
+        holeController = FindObjectOfType<HoleController>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -76,9 +80,16 @@ public class Ball : MonoBehaviour
         if (collision.gameObject.CompareTag("DeadArea"))
         {
             soundController.PlayPopSFX();
-            gameController.ballShotCount--;
-            pBObjController.canLoaded = true;
-            gameController.CheckGameOverStatus();
+            if (!isFake)
+            {
+                gameController.ballShotCount--;
+                pBObjController.canLoaded = true;
+                gameController.CheckGameOverStatus();
+            }
+            else
+            {
+                holeController.canFakeBallInstantiate = false;
+            }
             Destroy(gameObject);
         }
     }

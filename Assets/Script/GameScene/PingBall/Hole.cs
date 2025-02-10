@@ -25,9 +25,16 @@ public class Hole : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Ball") && isBlack)
+        if (collision.gameObject.CompareTag("Ball"))
         {
-            holeController.BallInBlackHole();
+            if (isBlack)
+            {
+                holeController.BallInBlackHole();
+            }
+            else
+            {
+                holeController.FakeBallInstantiate();
+            }
         }
     }
 }

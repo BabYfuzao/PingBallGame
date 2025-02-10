@@ -19,6 +19,7 @@ TagManager:
   - BurnAttack
   - LauchDoor
   - Meteorite
+  - FakeBall
   layers:
   - Default
   - TransparentFX

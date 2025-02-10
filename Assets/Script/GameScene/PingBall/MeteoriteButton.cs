@@ -11,6 +11,7 @@ public class MeteoriteButton : MonoBehaviour
     public MeteoriteBumper meteoriteBumper;
     public GameController gameController;
     public SoundController soundController;
+    public HoleController holeController;
 
     public GameObject meteoritePrefab;
     public Transform meteoriteTransform;
@@ -32,6 +33,12 @@ public class MeteoriteButton : MonoBehaviour
             StartCoroutine(ColorChange());
 
             StartCoroutine(MeteoriteShot());
+        }
+
+        else if (collision.gameObject.CompareTag("FakeBall"))
+        {
+            holeController.canFakeBallInstantiate = false;
+            Destroy(collision.gameObject);
         }
     }
 
