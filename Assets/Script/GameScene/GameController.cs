@@ -57,9 +57,8 @@ public class GameController : MonoBehaviour
     public bool isGamePause = false;
 
     public GameObject gameOverPanel;
-    public GameObject JokerDisplay;
+    public GameObject[] displayImages;
     public bool isGameOver = false;
-
 
     private void Start()
     {
@@ -238,17 +237,49 @@ public class GameController : MonoBehaviour
         Time.timeScale = 0;
         gameOverPanel.SetActive(true);
         isGameOver = true;
-        soundController.PlayGameOverBGM();
 
-        if (score >= 1 && killCount >= 1)
+        string message = $"{playerName}: \nYour score: {score} and kill: {killCount} enemies.";
+
+        if (killCount <= 0)
         {
-            SaveResult();
-            gameOverText.text = $"Congratulations! {playerName}, You get {score.ToString()} score, and kill {killCount.ToString()} enemy.";
+            soundController.PlayGameOverBGM();
+            displayImages[0].SetActive(true);
+            message += "\n<color=red>You look like a Joker.</color>";
+        }
+        else if (killCount <= 10)
+        {
+            soundController.PlayGameOverBGM();
+            displayImages[1].SetActive(true);
+            message += "\n<color=blue>Waste.</color>";
+        }
+        else if (killCount <= 20)
+        {
+            soundController.PlayGameOverBGM();
+            displayImages[2].SetActive(true);
+            message += "\n<color=gray>Normal.</color>";
+        }
+        else if (killCount <= 30)
+        {
+            soundController.PlayGameOverBGM2();
+            displayImages[3].SetActive(true);
+            message += "\n<color=green>Good!</color>";
+        }
+        else if (killCount <= 40)
+        {
+            soundController.PlayGameOverBGM2();
+            displayImages[4].SetActive(true);
+            message += "\n<color=yellow>Excellent!!</color>";
         }
         else
         {
-            gameOverText.text = "You look like a Joker.";
+            soundController.PlayGameOverBGM2();
+            displayImages[5].SetActive(true);
+            message += "\n<color=purple>You are the PinBall GOAT!!!.</color>";
         }
+
+        gameOverText.text = message;
+
+        SaveResult();
     }
 
     private void SaveResult()

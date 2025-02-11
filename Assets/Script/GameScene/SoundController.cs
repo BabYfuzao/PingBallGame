@@ -10,6 +10,7 @@ public class SoundController : MonoBehaviour
     // BGM
     public AudioClip gameBGM;
     public AudioClip gameOverBGM;
+    public AudioClip gameOverBGM2;
 
     // SFX
     public AudioClip popSFX;
@@ -67,6 +68,13 @@ public class SoundController : MonoBehaviour
     public void PlayGameOverBGM()
     {
         bGMAudioSource.clip = gameOverBGM;
+        bGMAudioSource.loop = false;
+        bGMAudioSource.Play();
+    }
+
+    public void PlayGameOverBGM2()
+    {
+        bGMAudioSource.clip = gameOverBGM2;
         bGMAudioSource.loop = false;
         bGMAudioSource.Play();
     }
