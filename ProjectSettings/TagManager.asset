@@ -20,6 +20,9 @@ TagManager:
   - LauchDoor
   - Meteorite
   - FakeBall
+  - Floor
+  - Bounce
+  - Flipper
   layers:
   - Default
   - TransparentFX

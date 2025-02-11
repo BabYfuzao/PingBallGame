@@ -21,7 +21,7 @@ public class EnemySpawner : MonoBehaviour
         {
             int maxEnemyIndex = Mathf.Min(enemySpawnCount / 8, enemys.Length - 1);
             GameObject enemy = Instantiate(GetRandomEnemy(maxEnemyIndex), transform.position, Quaternion.identity);
-            spawnInterval = Mathf.Max(1.5f, spawnInterval - 0.2f);
+            spawnInterval = Mathf.Max(2f, spawnInterval - 0.1f);
             enemySpawnCount++;
             yield return new WaitForSeconds(spawnInterval);
         }

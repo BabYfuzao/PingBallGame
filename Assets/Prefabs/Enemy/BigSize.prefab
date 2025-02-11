@@ -102,16 +102,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6153012676852689612}
   spriteRenderer: {fileID: 6153012676852689614}
-  hP: 20
-  moveSpeed: 0.5
+  hP: 18
+  moveSpeed: 0.4
   dropItemObjects:
   - itemPrefab: {fileID: 3439959083835068483, guid: feea3f71f45534646b343b933aa5b764, type: 3}
     dropChance: 3
   - itemPrefab: {fileID: 3439959083835068483, guid: 457dbc1a2cfe7e34785ec3a95a113cfd, type: 3}
     dropChance: 1
-  - itemPrefab: {fileID: 3439959083835068483, guid: 2a26e2b46fad6514d8aace5dc77b0750, type: 3}
-    dropChance: 1
-  overallDropChance: 0.1
+  overallDropChance: 0.2
   effectVFXs:
   - {fileID: 1141310455856065981, guid: 0bfe43f9fab36ff44930ad2fb8bd4810, type: 3}
   - {fileID: 4083882934981412272, guid: b2e8e640b6431264685a8d9fc8d0c38e, type: 3}

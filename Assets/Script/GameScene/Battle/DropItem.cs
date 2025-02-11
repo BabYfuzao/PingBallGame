@@ -8,6 +8,7 @@ public class DropItem : MonoBehaviour
 {
     private Player player;
     private GameController gameController;
+    private SoundController soundController;
     private HoleController holeController;
     private Transform playerTransform;
 
@@ -24,6 +25,7 @@ public class DropItem : MonoBehaviour
     {
         player = FindObjectOfType<Player>();
         gameController = FindObjectOfType<GameController>();
+        soundController = FindObjectOfType<SoundController>();
         holeController = FindObjectOfType<HoleController>();
         playerTransform = player.transform;
     }
@@ -52,6 +54,7 @@ public class DropItem : MonoBehaviour
                     BlackHoleItem();
                     break;
             }
+            soundController.PlayDropItemSFX();
             Destroy(gameObject);
         }
     }

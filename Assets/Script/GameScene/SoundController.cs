@@ -28,11 +28,15 @@ public class SoundController : MonoBehaviour
     public AudioClip flipperCloseSFX;
     public AudioClip dangerSFX;
     public AudioClip meteoriteSFX;
+    public AudioClip meteoriteExplosionSFX;
     public AudioClip holeSFX;
+    public AudioClip bounceSFX;
+    public AudioClip flipperSFX;
 
     // Battle
     public AudioClip gunSFX;
     public AudioClip enemyHitSFX;
+    public AudioClip dropItemSFX;
 
     // BGM
     public void PlayGameBGM(bool isPlayGameBGM)
@@ -93,6 +97,9 @@ public class SoundController : MonoBehaviour
     public void PlayFlipperCloseSFX() => PlaySFX(flipperCloseSFX);
     public void PlayDangerSFX() => PlaySFX(dangerSFX);
     public void PlayMeteoriteSFX() => PlaySFX(meteoriteSFX);
+    public void PlayMeteoriteExplosionSFX() => PlaySFX(meteoriteExplosionSFX);
+    public void PlayBounceSFX() => PlaySFX(bounceSFX);
+    public void PlayFlipperSFX() => PlaySFX(flipperSFX);
 
     public void PlayHoleSFX()
     {
@@ -109,4 +116,5 @@ public class SoundController : MonoBehaviour
     // Battle
     public void PlayGunSFX() => PlaySFX(gunSFX);
     public void PlayEnemyHitSFX() => PlaySFX(enemyHitSFX);
+    public void PlayDropItemSFX() => PlaySFX(dropItemSFX);
 }

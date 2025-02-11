@@ -4129,7 +4129,7 @@ MonoBehaviour:
   sceneLoader: {fileID: 333221015}
   bgAnim: {fileID: 589694584}
   audioSource: {fileID: 1055217906}
-  buttonSFX: {fileID: 8300000, guid: 2d88105a7db11bf4fb3c4b599f4883bc, type: 3}
+  buttonSFX: {fileID: 8300000, guid: cc55a6025cbf38247af954f68be0da37, type: 3}
   tittleSceneController: {fileID: 1301873427}
 --- !u!4 &1055217905
 Transform:

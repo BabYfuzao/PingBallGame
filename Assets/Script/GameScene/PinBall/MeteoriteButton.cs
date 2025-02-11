@@ -44,12 +44,18 @@ public class MeteoriteButton : MonoBehaviour
 
     public IEnumerator MeteoriteShot()
     {
+        bool canEmojiChange = true;
+
         meteoriteBumper.spriteRenderer.sprite = meteoriteBumper.screamingEmoji;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1.5f);
 
         GameObject meteorite = Instantiate(meteoritePrefab, meteoriteTransform.position, Quaternion.identity);
 
-        StartCoroutine(EmojiChange());
+        if (canEmojiChange)
+        {
+            StartCoroutine(EmojiChange());
+            canEmojiChange = false;
+        }
 
         Destroy(meteorite, 5f);
     }
@@ -87,7 +93,7 @@ public class MeteoriteButton : MonoBehaviour
 
         meteoriteBumper.spriteRenderer.sprite = meteoriteBumper.anxiousEmoji;
         soundController.PlayShotSFX();
-        gameController.ball.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 0.2f));
+        gameController.ball.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 0.3f));
         yield return new WaitForSeconds(0.5f);
 
         meteoriteBumper.controlDoor.SetActive(true);

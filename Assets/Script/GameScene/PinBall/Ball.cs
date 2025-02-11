@@ -73,6 +73,14 @@ public class Ball : MonoBehaviour
         {
             pBObjController.isShoot = true;
         }
+        if (collision.gameObject.CompareTag("Bounce"))
+        {
+            soundController.PlayBounceSFX();
+        }
+        if (collision.gameObject.CompareTag("Flipper"))
+        {
+            soundController.PlayFlipperSFX();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
